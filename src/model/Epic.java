@@ -1,17 +1,20 @@
 package model;
 
 import enums.Status;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Epic extends Task {
-    public ArrayList<Integer> subtaskEpicsId = new ArrayList<>();
+    private ArrayList<Integer> subtaskEpicsId = new ArrayList<>();
 
     public void setSubtaskEpicsId(ArrayList<Integer> subtaskEpicsId) {
         this.subtaskEpicsId = subtaskEpicsId;
     }
 
-    public Epic(){}
+    public Epic() {
+    }
+
     public Epic(String name, String description) {
         super(name, description);
         setStatus(Status.NEW);

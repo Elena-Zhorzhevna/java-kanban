@@ -4,7 +4,7 @@ import enums.Status;
 
 import java.util.Objects;
 
-public class Task{
+public class Task {
     private String taskName;
     private String description;
     private int id;
@@ -28,7 +28,9 @@ public class Task{
         this.id = id;
     }
 
-    public Task() {}
+    public Task() {
+    }
+
     public String getTaskName() {
         return taskName;
     }
