@@ -19,7 +19,6 @@ class SubtaskTest {
                 epic.getId());
         int subtaskId = taskManager.createSubtask(subtask).getId();
         Subtask savedSubtask = taskManager.getSubtaskById(subtaskId);
-
         assertNotNull(savedSubtask, "Подзадача не найдена.");
         assertEquals(subtask, savedSubtask, "Подзадачи не совпадают.");
         List<Subtask> subtasks = taskManager.getAllSubtasks();
