@@ -7,10 +7,7 @@ import java.util.Arrays;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskEpicsId = new ArrayList<>();
-
-    public void setSubtaskEpicsId(ArrayList<Integer> subtaskEpicsId) {
-        this.subtaskEpicsId = subtaskEpicsId;
-    }
+    int epicId;
 
     public Epic() {
     }
@@ -20,9 +17,28 @@ public class Epic extends Task {
         setStatus(Status.NEW);
     }
 
+    public Epic(String taskName, String description, Status status) {
+        super(taskName, description, status);
+    }
+
+    public Epic(int epicId, String name, String description) {
+        super(name, description);
+        this.epicId = epicId;
+    }
+
+    public Epic(int epicId, String name, String description, Status status) {
+        super(name, description, status);
+        this.epicId = epicId;
+    }
+
     public ArrayList<Integer> getSubtaskEpicsId() {
         return subtaskEpicsId;
     }
+
+    public void setSubtaskEpicsId(ArrayList<Integer> subtaskEpicsId) {
+        this.subtaskEpicsId = subtaskEpicsId;
+    }
+
 
     public void deleteSubtaskEpicsId(int id) {
         subtaskEpicsId.remove(id);

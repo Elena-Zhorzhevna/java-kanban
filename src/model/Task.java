@@ -10,15 +10,17 @@ public class Task {
     private int id;
     private Status status;
 
+    public Task() {
+    }
+
+    public Task(String taskName) {
+        this.taskName = taskName;
+    }
 
     public Task(String taskName, String description) {
         this.status = Status.NEW;
         this.taskName = taskName;
         this.description = description;
-    }
-
-    public Task(String taskName) {
-        this.taskName = taskName;
     }
 
     public Task(String taskName, String description, int id) {
@@ -28,7 +30,17 @@ public class Task {
         this.id = id;
     }
 
-    public Task() {
+    public Task(String taskName, String description, Status status) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+    }
+
+    public Task(String taskName, String description, Status status, int id) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+        this.id = id;
     }
 
     public String getTaskName() {
