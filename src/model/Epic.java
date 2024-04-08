@@ -4,10 +4,11 @@ import enums.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtaskEpicsId = new ArrayList<>();
-    int epicId;
+    private List<Integer> subtaskEpicsId = new ArrayList<>(); //список айди подзадач у эпика
+    private int epicId; //айди эпика
 
     public Epic() {
     }
@@ -31,19 +32,26 @@ public class Epic extends Task {
         this.epicId = epicId;
     }
 
-    public ArrayList<Integer> getSubtaskEpicsId() {
+    public List<Integer> getSubtaskEpicsId() {
         return subtaskEpicsId;
     }
 
-    public void setSubtaskEpicsId(ArrayList<Integer> subtaskEpicsId) {
+    public void setSubtaskEpicsId(List<Integer> subtaskEpicsId) {
         this.subtaskEpicsId = subtaskEpicsId;
     }
 
-
+    //удаляет из списка айди подзадачи
     public void deleteSubtaskEpicsId(int id) {
         subtaskEpicsId.remove(id);
     }
 
+    public int getEpicId() {
+        return epicId;
+    } //получает айди эпика
+
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
+    } //устанавливает айди эпика
 
     @Override
     public String toString() {
@@ -51,7 +59,7 @@ public class Epic extends Task {
                 "taskName ='" + getTaskName() +
                 ", id =" + getId() +
                 ", status =" + getStatus() +
-                ", subtasksList ='" + Arrays.toString(new ArrayList[]{subtaskEpicsId}) + '}';
+                ", subtasksList ='" + Arrays.toString(new List[]{subtaskEpicsId}) + '}';
 
     }
 }

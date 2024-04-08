@@ -6,6 +6,7 @@ import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import service.managers.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
+        //проверка получения всех задач
     void getAllTasksTest() {
         Task task1 = new Task("Тестовая задача1", "ОписаниеТЗ1", Status.NEW);
         taskManager.createTask(task1);
@@ -31,6 +33,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка получения всех эпиков
     void getAllEpicsTest() {
         Epic epic1 = new Epic("Эпик1", "Описание эпика1");
         taskManager.createEpic(epic1);
@@ -48,6 +51,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка получения всех подзадач
     void getAllSubtasksTest() {
         Epic epic = new Epic("ЭпикДляПодзадач", "ОписаниеЭпика для подзадач");
         taskManager.createEpic(epic);
@@ -67,6 +71,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка получения задачи по айди
     void getTaskByIdTest() {
         Task task = new Task("Task1", "Description");
         taskManager.createTask(task);
@@ -74,6 +79,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка получения эпика по айди
     void getEpicByIdTest() {
         Epic epic = new Epic("Epic1", "EpicsDescription");
         taskManager.createEpic(epic);
@@ -81,6 +87,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка получения подзадачи по айди
     void getSubtaskByIdTest() {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription");
         taskManager.createEpic(epic);
@@ -90,6 +97,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка добавления новой задачи
     void createTaskTest() {
         Task task = new Task("Задача1", "Описание задачи 1", Status.NEW, 1);
         assertNull(taskManager.getTaskById(task.getId()));
@@ -99,6 +107,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка добавления нового эпика
     void сreateEpicTest() {
         //Не пустой
         Epic testEpic = new Epic("Эпик 1", "Описание Эпика 1", Status.IN_PROGRESS);
@@ -112,6 +121,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка добавления новой подзадачи
     void createSubtaskTest() {
         Epic epic1 = new Epic("Эпик для подзадачи1", "Описание эпика подзадачи1", Status.NEW);
         taskManager.createEpic(epic1);
@@ -123,6 +133,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка обновления задачи
     void updateTaskTest() {
         Task task = new Task("Задача1", "Описание задачи 1", Status.NEW);
         taskManager.createTask(task);
@@ -139,6 +150,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка обновления эпика
     void updateEpicTest() {
         Epic epic = new Epic("Эпик1", "Описание эпика1", Status.IN_PROGRESS);
         taskManager.createEpic(epic);
@@ -154,6 +166,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка обновления подзадачи
     void updateSubtaskTest() {
         Epic epic = new Epic("Эпик1", "ОписаниеЭ1", Status.IN_PROGRESS);
         taskManager.createEpic(epic);
@@ -168,8 +181,8 @@ class InMemoryTaskManagerTest {
         assertTrue(taskManager.getAllSubtasks().isEmpty());
     }
 
-    //создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
     @Test
+        // проверка неизменности задачи при добавлении в менеджер
     void taskTheSameInAllFieldsWhenAddingATaskToManagerTest() {
         Task testTask = new Task("Задача1", "Описание задачи1", Status.NEW);
         taskManager.createTask(testTask);
@@ -180,6 +193,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка неизменности эпика при добавлении в менеджер
     void epicTheSameInAllFieldsWhenAddingATaskToManagerTest() {
         Epic testEpic = new Epic("Эпик1", "Описание эпика 1", Status.IN_PROGRESS);
         taskManager.createEpic(testEpic);
@@ -190,6 +204,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
+        //проверка неизменности подзадачи при добавлении в менеджер
     void subtaskTheSameInAllFieldsWhenAddingATaskToManagerTest() {
         Epic testEpic = new Epic("Эпик для подзадачи1", "Описание Эпика для подзадачи");
         taskManager.createEpic(testEpic);

@@ -3,6 +3,7 @@ package model;
 import enums.Status;
 import org.junit.jupiter.api.Test;
 import service.InMemory.InMemoryTaskManager;
+import service.managers.TaskManager;
 
 import java.util.List;
 
@@ -10,9 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class EpicTest {
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
+        //проверка добавления нового эпика
     void addNewEpicTest() {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", Status.NEW);
         int epicId = taskManager.createEpic(epic).getId();
@@ -26,7 +28,7 @@ class EpicTest {
     }
 
     @Test
-        //должен совпадать со своей копией
+        //проверка, совпадает ли эпик со своей копией
     void epicShouldEqualsWithCopyTest() {
         Epic epic = new Epic("Epic1", "description1", Status.NEW);
         Epic epikExpected = epic;
@@ -34,6 +36,7 @@ class EpicTest {
     }
 
     @Test
+        //Проверка статуса эпика, если все подзадачи со статусом - NEW
     void ChangeEpicStatusAllSubtaskStatusNewTest() {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription", Status.NEW);
         taskManager.createEpic(epic);
@@ -49,6 +52,7 @@ class EpicTest {
     }
 
     @Test
+        //Проверка статуса эпика, если все подзадачи со статусом - DONE
     void ChangeEpicStatusAllSubtaskStatusDoneTest() {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription", Status.NEW);
         taskManager.createEpic(epic);
@@ -64,6 +68,7 @@ class EpicTest {
     }
 
     @Test
+        //Проверка статуса эпика, если все подзадачи IN_PROGRESS
     void ChangeEpicStatusAllSubtaskStatusInProgressTest() {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription", Status.NEW);
         taskManager.createEpic(epic);
@@ -79,6 +84,7 @@ class EpicTest {
     }
 
     @Test
+        //Проверка статуса эпика, если подзадачи имеют статусы - NEW и DONE
     void ChangeEpicStatusSubtaskStatusDoneNewTest() {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription", Status.NEW);
         taskManager.createEpic(epic);

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static final ArrayList<Task> viewedTasks = new ArrayList<>();
+    private final List<Task> viewedTasks = new ArrayList<>(); //список просмотренных задач
 
     @Override
-    public void add(Task task) {
+    public void add(Task task) {  //добавление задачи в историю просмотров
         if (viewedTasks.size() >= 10) {
             viewedTasks.remove(0);
         }
@@ -18,8 +18,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory() { //получение списка просмотренных задач
         return viewedTasks;
-    }
+    } //получение списка 10 последних просмотренных задач
 
 }

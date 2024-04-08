@@ -3,7 +3,7 @@ package model;
 import enums.Status;
 
 public class Subtask extends Task {
-    private int epicId;
+    private int epicId; //айди эпика
 
     public Subtask(String name, String description) {
         super(name, description);
@@ -28,9 +28,9 @@ public class Subtask extends Task {
 
     public int getEpicId() {
         return epicId;
-    }
+    } //получение айди эпика
 
-    public void setEpicId(int Id) {
+    public void setEpicId(int Id) { //установление айди эпика
         this.epicId = Id;
     }
 

@@ -9,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ManagersTest {
 
-    @Test
+    @Test //проверяем, возвращает ли класс Manager проинициализированные и готовые к работе экземпляры менеджеров
     public void assertEqualsInMemoryHistoryManagerTest() {
-        InMemoryHistoryManager expected = new InMemoryHistoryManager();
-        InMemoryHistoryManager actual = Managers.getDefaultHistory();
+        HistoryManager expected = new InMemoryHistoryManager();
+        HistoryManager actual = Managers.getDefaultHistory();
         Assertions.assertNotNull(actual, "Объект не был создан.");
         assertEquals(expected.getHistory(), actual.getHistory(), ", history");
     }
 
-    @Test
+    @Test //проверяем, возвращает ли класс Manager проинициализированные и готовые к работе экземпляры менеджеров
     public void assertEqualsTaskManagerTest() {
         TaskManager expected = new InMemoryTaskManager();
         TaskManager actual = Managers.getDefault();

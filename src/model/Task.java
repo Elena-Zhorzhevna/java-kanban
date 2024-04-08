@@ -5,10 +5,10 @@ import enums.Status;
 import java.util.Objects;
 
 public class Task {
-    private String taskName;
-    private String description;
-    private int id;
-    private Status status;
+    private String taskName; //название задачи
+    private String description; //описание задачи
+    private int id; //айди задачи
+    private Status status; //статус задачи
 
     public Task() {
     }

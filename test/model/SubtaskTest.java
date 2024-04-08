@@ -2,6 +2,7 @@ package model;
 
 import org.junit.jupiter.api.Test;
 import service.InMemory.InMemoryTaskManager;
+import service.managers.TaskManager;
 
 import java.util.List;
 
@@ -9,9 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SubtaskTest {
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
+        //проверка добавления новой подзадачи
     void addNewSubtaskTest() {
         Epic epic = new Epic("Test epicForSubtask", "Test epicDescription");
         taskManager.createEpic(epic);
@@ -28,6 +30,7 @@ class SubtaskTest {
     }
 
     @Test
+        //проверка соответствия подзадачи своей копии
     void subtaskShouldEqualsWithCopyTest() {
         Subtask subtask = new Subtask("Subtask1", "description1");
         Subtask subtaskExpected = subtask;

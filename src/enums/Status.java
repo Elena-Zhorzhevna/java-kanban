@@ -1,6 +1,6 @@
 package enums;
 
-public enum Status {
+public enum Status { //перечисление статусов задач, эпиков, подзадач
     NEW,
     IN_PROGRESS,
     DONE

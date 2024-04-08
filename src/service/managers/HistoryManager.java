@@ -4,10 +4,10 @@ import model.Task;
 
 import java.util.List;
 
-public interface HistoryManager {
+public interface HistoryManager {  //интерфейс для управления историей просмотров
 
-    void add(Task task);
+    void add(Task task);  //помечает задачи как просмотренные
 
-    List<Task> getHistory();
+    List<Task> getHistory();  //возвращает список просмотренных задач
 }
 
