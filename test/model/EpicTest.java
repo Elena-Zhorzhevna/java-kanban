@@ -1,8 +1,11 @@
 package model;
 
 import enums.Status;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.InMemory.InMemoryHistoryManager;
 import service.InMemory.InMemoryTaskManager;
+import service.managers.HistoryManager;
 import service.managers.TaskManager;
 
 import java.util.List;
@@ -11,7 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class EpicTest {
-    TaskManager taskManager = new InMemoryTaskManager();
+    private TaskManager taskManager;
+
+    @BeforeEach
+    void setUp() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+        taskManager = new InMemoryTaskManager(historyManager);
+    }
 
     @Test
         //проверка добавления нового эпика
@@ -41,10 +50,12 @@ class EpicTest {
         Epic epic = new Epic("EpicForSubtask", "EpicsDescription", Status.NEW);
         taskManager.createEpic(epic);
         //Все подзадачи со статусом NEW
-        Subtask subtask1 = taskManager.createSubtask(new Subtask("Subtask1", "SubtasksDescription",
-                Status.NEW, epic.getId()));
-        Subtask subtask2 = taskManager.createSubtask(new Subtask("Subtask2",
-                "SubtasksDescription2", Status.NEW, epic.getId()));
+        Subtask subtask1 = new Subtask("Subtask1", "SubtasksDescription",
+                Status.NEW, epic.getId());
+        taskManager.createSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask2",
+                "SubtasksDescription2", Status.NEW, epic.getId());
+        taskManager.createSubtask(subtask2);
         assertEquals(Status.NEW, taskManager.getEpicById(epic.getId()).getStatus());
         //Если список пуст
         taskManager.deleteAllSubtasks();

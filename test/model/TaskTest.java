@@ -1,8 +1,11 @@
 package model;
 
 import enums.Status;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.InMemory.InMemoryHistoryManager;
 import service.InMemory.InMemoryTaskManager;
+import service.managers.HistoryManager;
 import service.managers.TaskManager;
 
 import java.util.List;
@@ -11,7 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TaskTest {
-    TaskManager taskManager = new InMemoryTaskManager();
+    private TaskManager taskManager;
+
+    @BeforeEach
+    void setUp() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+        taskManager = new InMemoryTaskManager(historyManager);
+    }
 
     @Test
         //проверка добавления новой подзадачи

@@ -5,7 +5,9 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.managers.HistoryManager;
 import service.managers.TaskManager;
 
 import java.util.ArrayList;
@@ -13,8 +15,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class InMemoryTaskManagerTest {
-    TaskManager taskManager = new InMemoryTaskManager();
+    private TaskManager taskManager;
+
+    @BeforeEach
+    void setUp() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+        taskManager = new InMemoryTaskManager(historyManager);
+    }
 
     @Test
         //проверка получения всех задач
@@ -100,22 +109,21 @@ class InMemoryTaskManagerTest {
         //проверка добавления новой задачи
     void createTaskTest() {
         Task task = new Task("Задача1", "Описание задачи 1", Status.NEW, 1);
-        assertNull(taskManager.getTaskById(task.getId()));
         taskManager.createTask(task);
-        assertNull(taskManager.getTaskById(7));
+        assertNotNull(taskManager.getTaskById(task.getId()));
         Assertions.assertEquals(task, taskManager.getTaskById(task.getId()));
     }
 
     @Test
         //проверка добавления нового эпика
     void сreateEpicTest() {
-        //Не пустой
+        //не пустой
         Epic testEpic = new Epic("Эпик 1", "Описание Эпика 1", Status.IN_PROGRESS);
         taskManager.createEpic(testEpic);
         assertEquals(taskManager.getEpicById(testEpic.getId()).getTaskName(), testEpic.getTaskName());
         assertEquals(taskManager.getEpicById(testEpic.getId()).getDescription(), testEpic.getDescription());
         assertEquals(taskManager.getEpicById(testEpic.getId()).getStatus(), testEpic.getStatus());
-        //С пустым списком задач
+        //с пустым списком задач
         taskManager.deleteAllEpics();
         assertTrue(taskManager.getAllEpics().isEmpty());
     }
@@ -126,10 +134,10 @@ class InMemoryTaskManagerTest {
         Epic epic1 = new Epic("Эпик для подзадачи1", "Описание эпика подзадачи1", Status.NEW);
         taskManager.createEpic(epic1);
         Subtask subtask = new Subtask("Подзадача1", "Описание подзадачи1", Status.NEW, 4, epic1.getId());
-        assertNull(taskManager.getSubtaskById(subtask.getId()));
         taskManager.createSubtask(subtask);
-        assertNull(taskManager.getSubtaskById(9));
-        Assertions.assertEquals(subtask, taskManager.getSubtaskById(subtask.getId()));
+        assertNotNull(taskManager.getSubtaskById(subtask.getId()));
+        taskManager.createSubtask(subtask);
+        assertEquals(subtask, taskManager.getSubtaskById(subtask.getId()));
     }
 
     @Test
@@ -182,7 +190,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-        // проверка неизменности задачи при добавлении в менеджер
+        //проверка неизменности задачи при добавлении в менеджер
     void taskTheSameInAllFieldsWhenAddingATaskToManagerTest() {
         Task testTask = new Task("Задача1", "Описание задачи1", Status.NEW);
         taskManager.createTask(testTask);
@@ -215,5 +223,50 @@ class InMemoryTaskManagerTest {
         assertEquals(taskManager.getSubtaskById(subtask.getId()).getDescription(), subtask.getDescription());
         assertEquals(taskManager.getSubtaskById(subtask.getId()).getStatus(), subtask.getStatus());
         assertEquals(taskManager.getSubtaskById(subtask.getId()).getId(), subtask.getId());
+    }
+
+    @Test
+        //удаляемые подзадачи не должны хранить внутри себя старые id
+    void deletedSubtasksShouldNotStoreOldIDsTest() {
+        Epic epicForSubtask = new Epic("Test epicForSubtask", "Test epicDescription");
+        taskManager.createEpic(epicForSubtask);
+        Subtask subtask1 = new Subtask("Test Subtask1", "Test Subtask1 description",
+                epicForSubtask.getId());
+        taskManager.createSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Test Subtask2", "Test Subtask2 description",
+                epicForSubtask.getId());
+        taskManager.createSubtask(subtask2);
+        int index = subtask1.getId();
+        assertTrue(taskManager.getAllEpicSubtasks(epicForSubtask.getId()).contains(subtask1));
+        taskManager.deleteSubtaskById(index);
+        assertFalse(taskManager.getAllEpicSubtasks(epicForSubtask.getId()).contains(subtask1));
+        Subtask subtask3 = new Subtask("S3", "SD3", Status.NEW, epicForSubtask.getId());
+        taskManager.createSubtask(subtask3);
+        subtask3.setId(index);
+        assertEquals(index, subtask3.getId());
+        assertTrue(taskManager.getAllEpicSubtasks(epicForSubtask.getId()).contains(subtask3));
+    }
+
+    @Test
+        //внутри эпиков не должно оставаться неактуальных id подзадач
+    void ThereShouldBeNoIrrelevantSubtaskIDsInsideTheEpicsTest() {
+        Epic epicForSubtask = new Epic("Test epicForSubtask", "Test epicDescription");
+        taskManager.createEpic(epicForSubtask);
+        Epic epicForSubtask2 = new Epic("Test epicForSubtask", "Test epicDescription");
+        taskManager.createEpic(epicForSubtask2);
+        Subtask subtask1 = new Subtask("Test Subtask1", "Test Subtask1 description",
+                epicForSubtask.getId());
+        taskManager.createSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Test Subtask2", "Test Subtask2 description",
+                epicForSubtask.getId());
+        taskManager.createSubtask(subtask2);
+        Subtask subtask3ForEpic2 = new Subtask("TestSubtask3", "Test SD3", epicForSubtask2.getId());
+        taskManager.createSubtask(subtask3ForEpic2);
+        assertEquals(2, taskManager.getAllEpicSubtasks(epicForSubtask.getId()).size());
+        assertEquals(1, taskManager.getAllEpicSubtasks(epicForSubtask2.getId()).size());
+        taskManager.deleteSubtaskById(subtask2.getId());
+        assertEquals(1, taskManager.getAllEpicSubtasks(epicForSubtask.getId()).size());
+        taskManager.deleteSubtaskById(subtask3ForEpic2.getId());
+        assertTrue(taskManager.getAllEpicSubtasks(epicForSubtask2.getId()).isEmpty());
     }
 }

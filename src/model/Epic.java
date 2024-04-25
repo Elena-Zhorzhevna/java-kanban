@@ -60,6 +60,5 @@ public class Epic extends Task {
                 ", id =" + getId() +
                 ", status =" + getStatus() +
                 ", subtasksList ='" + Arrays.toString(new List[]{subtaskEpicsId}) + '}';
-
     }
 }

@@ -17,7 +17,11 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Subtask> subtasks = new HashMap<>(); //хэш-таблица подзадач
     private final Map<Integer, Epic> epics = new HashMap<>(); //хэш-таблица эпиков
 
-    private final HistoryManager viewedTasks = new InMemoryHistoryManager(); //объект хранит просмотренные задачи
+    private final HistoryManager historyManager; //объект хранит просмотренные задачи
+
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
 
     private static int id = 0; //айди задач
 
@@ -73,19 +77,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(Integer id) { //получение задачи по айди
-        viewedTasks.add(tasks.get(id)); //добавление задачи в историю просмотров
+        historyManager.add(tasks.get(id)); //добавление задачи в историю просмотров
         return tasks.get(id);
     }
 
     @Override
     public Epic getEpicById(Integer id) { //получение эпика по айди
-        viewedTasks.add(epics.get(id)); //добавление эпика в историю просмотров
+        historyManager.add(epics.get(id)); //добавление эпика в историю просмотров
         return epics.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(Integer id) { //получение подзадачи по айди
-        viewedTasks.add(subtasks.get(id)); //добавление подзадачи в историю просмотров
+        historyManager.add(subtasks.get(id)); //добавление подзадачи в историю просмотров
         return subtasks.get(id);
     }
 
@@ -131,9 +135,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteByTaskId(int id) {
+    public void deleteByTaskId(int id) {//удаление задачи по айди
         tasks.remove(id);
-    } //удаление задачи по айди
+        historyManager.remove(id); //удаление задачи из истории просмотров
+    }
 
     @Override
     public void deleteSubtaskById(int id) { //удаление подзадачи по айди
@@ -143,11 +148,13 @@ public class InMemoryTaskManager implements TaskManager {
                 for (int i = 0; i < epic.getSubtaskEpicsId().size(); i++) {
                     if (epic.getSubtaskEpicsId().get(i) == id) {
                         epic.getSubtaskEpicsId().remove(i);
+                        historyManager.remove(i);
                         break;
                     }
                 }
             }
             subtasks.remove(id);
+            historyManager.remove(id);
         }
     }
 
@@ -159,14 +166,16 @@ public class InMemoryTaskManager implements TaskManager {
             for (Integer i : epic.getSubtaskEpicsId()) {
                 if (subtasks != null) {
                     subtasks.remove(i);
+                    historyManager.remove(i);
                 }
             }
             epics.remove(id);
+            historyManager.remove(id);
         }
     }
 
     public List<Task> getHistory() { //возвращает 10 последних просмотренных задач
-        return viewedTasks.getHistory();
+        return historyManager.getHistory();
     }
 
     private void calculateEpicStatus(Integer epicId) { //рассчитывает статус эпика
@@ -193,5 +202,3 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStatus(result);
     }
 }
-
-
