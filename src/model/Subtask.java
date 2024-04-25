@@ -30,8 +30,8 @@ public class Subtask extends Task {
         return epicId;
     } //получение айди эпика
 
-    public void setEpicId(int Id) { //установление айди эпика
-        this.epicId = Id;
+    public void setEpicId(int id) { //установление айди эпика
+        this.epicId = id;
     }
 
     @Override
