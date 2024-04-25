@@ -135,7 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteByTaskId(int id) {//удаление задачи по айди
+    public void deleteByTaskId(int id) { //удаление задачи по айди
         tasks.remove(id);
         historyManager.remove(id); //удаление задачи из истории просмотров
     }
