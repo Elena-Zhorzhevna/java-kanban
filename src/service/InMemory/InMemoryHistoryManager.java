@@ -6,11 +6,12 @@ import service.managers.HistoryManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final HashMap<Integer, Node> viewedTasks = new HashMap<>();
-    Node head;
-    Node tail;
+    private final Map<Integer, Node> viewedTasks = new HashMap<>();
+    private Node head;
+    private Node tail;
 
     public InMemoryHistoryManager() {
         head = null;
@@ -18,9 +19,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private static class Node {
-        Task element;
-        Node next;
-        Node prev;
+        private Task element;
+        private Node next;
+        private Node prev;
 
         public Node(Task element) {
             this.element = element;
