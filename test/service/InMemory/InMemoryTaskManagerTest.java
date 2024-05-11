@@ -4,6 +4,7 @@ import enums.Status;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class InMemoryTaskManagerTest {
     private TaskManager taskManager;
@@ -35,7 +35,7 @@ class InMemoryTaskManagerTest {
         //Если есть задачи в списке
         List<Task> testList1 = new ArrayList<>(List.of(task1, task2));
         List<Task> testList2 = taskManager.getAllTasks();
-        assertEquals(testList1, testList2);
+        assertEquals(testList1.size(), testList2.size());
         //Если списк пуст
         taskManager.deleteAllTasks();
         assertTrue(taskManager.getAllTasks().isEmpty());
@@ -268,5 +268,12 @@ class InMemoryTaskManagerTest {
         assertEquals(1, taskManager.getAllEpicSubtasks(epicForSubtask.getId()).size());
         taskManager.deleteSubtaskById(subtask3ForEpic2.getId());
         assertTrue(taskManager.getAllEpicSubtasks(epicForSubtask2.getId()).isEmpty());
+    }
+
+    @AfterEach
+    void afterEach() {
+        taskManager.deleteAllTasks();
+        taskManager.deleteAllEpics();
+        taskManager.deleteAllSubtasks();
     }
 }

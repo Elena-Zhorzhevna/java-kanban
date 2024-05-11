@@ -1,18 +1,10 @@
 package service;
 
-import model.Epic;
-import model.Subtask;
-import model.Task;
-import service.InMemory.InMemoryHistoryManager;
-import service.InMemory.InMemoryTaskManager;
-import service.managers.HistoryManager;
-import service.managers.TaskManager;
-
 public class Main {
     public static void main(String[] args) {
 
-        // Необязательное задание из ТЗ
-        HistoryManager h = new InMemoryHistoryManager();
+        // Необязательное задание из ТЗ 6 спринта
+/*      HistoryManager h = new InMemoryHistoryManager();
         TaskManager m = new InMemoryTaskManager(h);
 
         Task task1 = new Task("T1", "TD1");
@@ -42,6 +34,6 @@ public class Main {
         m.deleteByTaskId(task2.getId());
         System.out.println(h.getHistory());
         m.deleteEpicById(epic1.getId());
-        System.out.println(h.getHistory());
+        System.out.println(h.getHistory());*/
     }
 }

@@ -1,10 +1,13 @@
 package model;
 
 import enums.Status;
+import enums.TaskType;
 
 import java.util.Objects;
 
 public class Task {
+
+    private TaskType type = TaskType.TASK; //тип задачи
     private String taskName; //название задачи
     private String description; //описание задачи
     private int id; //айди задачи
@@ -43,6 +46,14 @@ public class Task {
         this.id = id;
     }
 
+    public Task(int id, TaskType type, String taskName, Status status, String description) {
+        this.id = id;
+        this.type = type;
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+    }
+
     public String getTaskName() {
         return taskName;
     }
@@ -75,6 +86,14 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getType() {
+        return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
+    }
+
     public Integer getId(int id) {
         this.id = id;
         return id;
@@ -104,4 +123,3 @@ public class Task {
                 ", status ='" + status + '}';
     }
 }
-
