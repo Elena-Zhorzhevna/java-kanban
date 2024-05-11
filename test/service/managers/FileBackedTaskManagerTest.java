@@ -24,7 +24,8 @@ class FileBackedTaskManagerTest {
     public void beforeEach() {
         {
             try {  //создание временного файла в указанном каталоге
-                testFile = File.createTempFile("testTask", ".csv", new File("D:/"));
+                testFile = File.createTempFile("testTask", ".csv",
+                        new File("C:/Users/Лена/dev/first-project/java-kanban"));
                 System.out.println(
                         "Temporary file is located on Specified location: "
                                 + testFile.getAbsolutePath());
@@ -71,9 +72,14 @@ class FileBackedTaskManagerTest {
     }
 
     @Test    //проверка загрузки нескольких задач
-    public void uploadingTasksTest() throws IOException {
+    public void uploadingTasksTest() {
         bm = new FileBackedTaskManager(testFile, hm);
-        BufferedWriter bw = new BufferedWriter(new FileWriter(testFile));
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(testFile));
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
         Task task8 = new Task();
         task8.setId(8);
@@ -108,12 +114,36 @@ class FileBackedTaskManagerTest {
         subtask11.setEpicId(epic10.getId());
         bm.createSubtask(subtask11);
 
-        bw.write(bm.toString(task8));
-        bw.write(bm.toString(task9));
-        bw.write(bm.toString(epic10));
-        bw.write(bm.toString(subtask11));
-        bw.close();
-        bm.loadFromFile(testFile);
+        try {
+            bw.write(bm.toString(task8));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.write(bm.toString(task9));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.write(bm.toString(epic10));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.write(bm.toString(subtask11));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bm.loadFromFile(testFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(2, bm.getAllTasks().size());
         assertEquals(1, bm.getAllEpics().size());
         assertEquals(1, bm.getAllSubtasks().size());
