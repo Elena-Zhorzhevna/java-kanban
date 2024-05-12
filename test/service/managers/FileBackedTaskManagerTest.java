@@ -24,9 +24,10 @@ class FileBackedTaskManagerTest {
     public void beforeEach() {
         {
             try {  //создание временного файла в указанном каталоге
-                testFile = File.createTempFile("testTask", ".csv");
+                testFile = File.createTempFile("testTask", ".csv",
+                        new File("C:/Users/Лена/dev/first-project/java-kanban"));
                 System.out.println(
-                        "Temporary file is located on Default location: "
+                        "Temporary file is located on Specified location: "
                                 + testFile.getAbsolutePath());
             } catch (IOException e) {
                 throw new RuntimeException(e);
