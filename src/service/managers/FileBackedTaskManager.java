@@ -12,59 +12,11 @@ import java.io.*;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    public static void main(String[] args) throws IOException {
-        //реализовано доп.задание 7 спринта
-        /*FileBackedTaskManager bm = new FileBackedTaskManager(historyManager);
-        Task task3 = new Task("t3", "dt3", Status.IN_PROGRESS);
-        bm.createTask(task3);
-        Epic epic1 = new Epic("e1", "de1", Status.DONE);
-        bm.createEpic(epic1);
-        Epic epic2 = new Epic("e2", "de2", Status.IN_PROGRESS);
-        bm.createEpic(epic2);
-        Task task1 = new Task("t1", "dt1", Status.NEW);
-        bm.createTask(task1);
-        Task task2 = new Task("t2", "dt2", Status.NEW);
-        bm.createTask(task2);
-        // bm.deleteAllTasks();
-        System.out.println(bm.getAllTasks());
-        System.out.println(bm.getAllEpics());
-        System.out.println(bm.getAllSubtasks());
-        Subtask subtask1 = new Subtask("s1", "ds1", Status.NEW, epic2.getId());
-        bm.createSubtask(subtask1);
-        Subtask subtask2 = new Subtask("s2", "ds2", Status.IN_PROGRESS, epic1.getId());
-        bm.createSubtask(subtask2);
-        System.out.println(bm.getAllTasks());
-        System.out.println(bm.getAllEpics());
-        System.out.println(bm.getAllSubtasks());
-        System.out.println("-----------");
-        FileBackedTaskManager bm2 = new FileBackedTaskManager(historyManager);
-        //bm2.deleteAllEpics();
-        System.out.println(bm2.getAllTasks());
-        System.out.println(bm.getAllEpics());
-        System.out.println(bm.getAllSubtasks());
-        System.out.println("-----------");
-        bm.loadFromFile(file);
-        System.out.println(bm.getAllTasks());
-        System.out.println(bm.getAllEpics());
-        bm.deleteAllEpics();
-        bm.deleteAllTasks();
-        bm.getAllSubtasks(); */
-    }
+    private static final String FIRST_STRING = "id,type,name,status,description,epic"; //первая строка файла
+    private static File file = new File("TASK_CSV"); //файл для сохранения данных
+    private static HistoryManager historyManager = Managers.getDefaultHistory();
 
-    private static final String firstString = "id,type,name,status,description,epic"; //первая строка файла
-    private static final File file = new File("TASK_CSV"); //файл для сохранения данных
-    public static HistoryManager historyManager = Managers.getDefaultHistory();
-
-    public FileBackedTaskManager(HistoryManager historyManager) {
-        super(historyManager);
-    }
-
-    public FileBackedTaskManager() throws IOException {
-        super(historyManager);
-        loadFromFile(file);
-    }
-
-    public FileBackedTaskManager(File file, HistoryManager historyManager) {
+    private FileBackedTaskManager(HistoryManager historyManager) {
         super(historyManager);
     }
 
@@ -168,7 +120,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() { //сохранение текущего состояния менеджера в указанный файл
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write(firstString + "\n");
+            bufferedWriter.write(FIRST_STRING + "\n");
 
             for (Task task : getAllTasks()) {
                 bufferedWriter.write(toString(task));

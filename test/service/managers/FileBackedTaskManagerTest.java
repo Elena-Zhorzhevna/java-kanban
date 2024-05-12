@@ -8,7 +8,6 @@ import model.Task;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.InMemory.InMemoryHistoryManager;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,10 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class FileBackedTaskManagerTest {
     File testFile;
     FileBackedTaskManager bm;
-    HistoryManager hm = new InMemoryHistoryManager();
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IOException {
         {
             try {  //создание временного файла в указанном каталоге
                 testFile = File.createTempFile("testTask", ".csv");
@@ -32,7 +30,7 @@ class FileBackedTaskManagerTest {
                 throw new RuntimeException(e);
             }
         }
-        bm = new FileBackedTaskManager(testFile, hm);
+        bm = FileBackedTaskManager.loadFromFile(testFile);
     }
 
     @Test     //проверка сохранения нескольких задач
@@ -71,14 +69,8 @@ class FileBackedTaskManagerTest {
     }
 
     @Test    //проверка загрузки нескольких задач
-    public void uploadingTasksTest() {
-        bm = new FileBackedTaskManager(testFile, hm);
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter(testFile));
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public void uploadingTasksTest() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(testFile));
 
         Task task8 = new Task();
         task8.setId(8);
@@ -113,36 +105,12 @@ class FileBackedTaskManagerTest {
         subtask11.setEpicId(epic10.getId());
         bm.createSubtask(subtask11);
 
-        try {
-            bw.write(bm.toString(task8));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bw.write(bm.toString(task9));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bw.write(bm.toString(epic10));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bw.write(bm.toString(subtask11));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bm.loadFromFile(testFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        bw.write(bm.toString(task8));
+        bw.write(bm.toString(task9));
+        bw.write(bm.toString(epic10));
+        bw.write(bm.toString(subtask11));
+        bw.close();
+        bm.loadFromFile(testFile);
         assertEquals(2, bm.getAllTasks().size());
         assertEquals(1, bm.getAllEpics().size());
         assertEquals(1, bm.getAllSubtasks().size());
