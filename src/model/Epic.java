@@ -1,7 +1,6 @@
 package model;
 
 import enums.Status;
-import enums.TaskType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,9 +8,7 @@ import java.util.List;
 
 public class Epic extends Task {
     private List<Integer> subtaskEpicsId = new ArrayList<>(); //список айди подзадач у эпика
-
-    private int id; //айди эпика
-    private TaskType type = TaskType.EPIC;
+    private int epicId; //айди эпика
 
     public Epic() {
     }
@@ -25,18 +22,14 @@ public class Epic extends Task {
         super(taskName, description, status);
     }
 
-    public Epic(int id, String name, String description) {
+    public Epic(int epicId, String name, String description) {
         super(name, description);
-        this.id = id;
+        this.epicId = epicId;
     }
 
-    public Epic(int id, String name, String description, Status status) {
+    public Epic(int epicId, String name, String description, Status status) {
         super(name, description, status);
-        this.id = id;
-    }
-
-    public Epic(int id, TaskType type, String taskName, String description, Status status) {
-        super(id, type, taskName, status, description);
+        this.epicId = epicId;
     }
 
     public List<Integer> getSubtaskEpicsId() {
@@ -52,15 +45,13 @@ public class Epic extends Task {
         subtaskEpicsId.remove(id);
     }
 
-    @Override
-    public TaskType getType() {
-        return type;
-    }
+    public int getEpicId() {
+        return epicId;
+    } //получает айди эпика
 
-    @Override
-    public void setType(TaskType type) {
-        this.type = type;
-    }
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
+    } //устанавливает айди эпика
 
     @Override
     public String toString() {
