@@ -15,6 +15,7 @@ public class Task {
 
     public Task() {
     }
+
     public Task(String taskName) {
         this.taskName = taskName;
     }
