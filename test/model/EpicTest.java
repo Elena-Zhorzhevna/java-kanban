@@ -1,6 +1,7 @@
 package model;
 
 import enums.Status;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.InMemory.InMemoryHistoryManager;
@@ -108,5 +109,12 @@ class EpicTest {
         //Если список пуст
         taskManager.deleteAllSubtasks();
         assertEquals(0, taskManager.getAllSubtasks().size());
+    }
+
+    @AfterEach
+    void afterEach() {
+        taskManager.deleteAllTasks();
+        taskManager.deleteAllEpics();
+        taskManager.deleteAllSubtasks();
     }
 }
