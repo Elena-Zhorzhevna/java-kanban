@@ -73,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public boolean deleteAllEpics() {//удаление всех эпиков и их подзадач
+    public boolean deleteAllEpics() { //удаление всех эпиков и их подзадач
         epics.entrySet()
                 .stream()
                 .peek(it -> {
