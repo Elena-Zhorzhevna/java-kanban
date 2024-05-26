@@ -1,4 +1,4 @@
-package service.InMemory;
+package service.in_memory;
 
 import model.Task;
 import service.managers.HistoryManager;

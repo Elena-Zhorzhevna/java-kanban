@@ -4,6 +4,7 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TaskManager {
@@ -15,11 +16,11 @@ public interface TaskManager {
 
     List<Subtask> getAllEpicSubtasks(Integer epicId); //получение списка всех подзадач у эпика
 
-    boolean deleteAllTasks(); //удаление всех задач
+    boolean deleteAllTasks() throws IOException; //удаление всех задач
 
-    boolean deleteAllEpics(); //удаление всех эпиков и их подзадач
+    boolean deleteAllEpics() throws IOException; //удаление всех эпиков и их подзадач
 
-    boolean deleteAllSubtasks(); //удаление всех подзадач
+    boolean deleteAllSubtasks() throws IOException; //удаление всех подзадач
 
     Task getTaskById(Integer id); //получение задачи по айди
 
@@ -27,23 +28,23 @@ public interface TaskManager {
 
     Subtask getSubtaskById(Integer id); //получение подзадачи по айди
 
-    Task createTask(Task task); //добавление новой задачи
+    Task createTask(Task task) throws IOException; //добавление новой задачи
 
-    Epic createEpic(Epic epic); //добавление эпика
+    Epic createEpic(Epic epic) throws IOException; //добавление эпика
 
-    Subtask createSubtask(Subtask subtask); //добавление подзадачи
+    Subtask createSubtask(Subtask subtask) throws IOException; //добавление подзадачи
 
-    void updateTask(Task newTask); //обновление задачи
+    void updateTask(Task newTask) throws IOException; //обновление задачи
 
-    void updateEpic(Epic newEpic); //обновление эпика
+    void updateEpic(Epic newEpic) throws IOException; //обновление эпика
 
-    void updateSubtask(Subtask newSubtask); //обновление подзадачи
+    void updateSubtask(Subtask newSubtask) throws IOException; //обновление подзадачи
 
-    void deleteByTaskId(int id); //удаление задачи по айди
+    void deleteByTaskId(int id) throws IOException; //удаление задачи по айди
 
     void deleteSubtaskById(int id); //удаление подзадачи по айди
 
-    void deleteEpicById(int id); //удаление эпика по айди
+    void deleteEpicById(int id) throws IOException; //удаление эпика по айди
 
     public List<Task> getHistory(); //получение списка 10 последних просмотренных задач
 }

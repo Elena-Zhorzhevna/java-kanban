@@ -3,6 +3,8 @@ package model;
 import enums.Status;
 import enums.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +41,11 @@ public class Epic extends Task {
         super(id, type, taskName, status, description);
     }
 
+    public Epic(int id, TaskType type, String taskName, Status status, String description, LocalDateTime startTime,
+                Duration duration, LocalDateTime endTime) {
+        super(id, type, taskName, status, description, startTime, duration, endTime);
+    }
+
     public List<Integer> getSubtaskEpicsId() {
         return subtaskEpicsId;
     }
@@ -47,9 +54,8 @@ public class Epic extends Task {
         this.subtaskEpicsId = subtaskEpicsId;
     }
 
-    //удаляет из списка айди подзадачи
-    public void deleteSubtaskEpicsId(int id) {
-        subtaskEpicsId.remove(id);
+    public void deleteSubtaskEpicsId() {
+        subtaskEpicsId.clear();
     }
 
     @Override
@@ -68,6 +74,10 @@ public class Epic extends Task {
                 "taskName ='" + getTaskName() +
                 ", id =" + getId() +
                 ", status =" + getStatus() +
-                ", subtasksList ='" + Arrays.toString(new List[]{subtaskEpicsId}) + '}';
+                ", duration = " + getDuration().toMinutes() +
+                ", start_time ='" + getStartTime() +
+                ", end_time ='" + getEndTime() + '\'' +
+                ", subtasksList ='" + Arrays.toString(new List[]{subtaskEpicsId}) +
+                '}';
     }
 }
