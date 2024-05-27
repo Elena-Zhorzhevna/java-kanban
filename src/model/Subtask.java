@@ -3,9 +3,15 @@ package model;
 import enums.Status;
 import enums.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicId; //айди эпика
     private TaskType type = TaskType.SUBTASK; //тип подзадачи
+
+    public Subtask() {
+    }
 
     public Subtask(String name, String description) {
         super(name, description);
@@ -33,7 +39,10 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    public Subtask() {
+    public Subtask(int id, TaskType type, String taskName, Status status, String description, LocalDateTime startTime,
+                   Duration duration, LocalDateTime endTime, int epicId) {
+        super(id, type, taskName, status, description, startTime, duration, endTime);
+        this.epicId = epicId;
     }
 
     public int getEpicId() {
@@ -60,7 +69,10 @@ public class Subtask extends Task {
                 "taskName ='" + getTaskName() +
                 ", status =" + getStatus() +
                 ", id =" + getId() +
-                ", epic_id =" + epicId + '}';
+                ", epic_id =" + epicId +
+                ", duration = " + getDuration().toMinutes() +
+                ", start_time ='" + getStartTime() +
+                ", end_time ='" + getEndTime() + '\'' +
+                '}';
     }
 }
-

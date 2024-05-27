@@ -3,6 +3,8 @@ package model;
 import enums.Status;
 import enums.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -12,6 +14,9 @@ public class Task {
     private String description; //описание задачи
     private int id; //айди задачи
     private Status status; //статус задачи
+    private Duration duration = Duration.ofMinutes(0); //продолжительность задачи
+    private LocalDateTime startTime; // дата и время, когда предполагается приступить к выполнению задачи
+    private LocalDateTime endTime; //время окончания задачи
 
     public Task() {
     }
@@ -52,6 +57,18 @@ public class Task {
         this.taskName = taskName;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(int id, TaskType type, String taskName, Status status, String description, LocalDateTime startTime,
+                Duration duration, LocalDateTime endTime) {
+        this.id = id;
+        this.type = type;
+        this.taskName = taskName;
+        this.status = status;
+        this.description = description;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.endTime = endTime;
     }
 
     public String getTaskName() {
@@ -99,6 +116,33 @@ public class Task {
         return id;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime != null) {
+            endTime = startTime.plus(duration);
+        }
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,6 +164,10 @@ public class Task {
                 "name ='" + taskName +
                 ", description ='" + description +
                 ", id =" + id +
-                ", status ='" + status + '}';
+                ", status ='" + status +
+                ", duration = " + duration.toMinutes() +
+                ", start_time ='" + startTime +
+                ", end_time ='" + endTime + '\'' +
+                '}';
     }
 }

@@ -1,7 +1,7 @@
 package service.managers;
 
-import service.InMemory.InMemoryHistoryManager;
-import service.InMemory.InMemoryTaskManager;
+import service.in_memory.InMemoryHistoryManager;
+import service.in_memory.InMemoryTaskManager;
 
 public class Managers { //подбирает нужную реализацию TaskManager и возвращает объект правильного типа
     public static TaskManager getDefault() { //возвращает объект - менеджер

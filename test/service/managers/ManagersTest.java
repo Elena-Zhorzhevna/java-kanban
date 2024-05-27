@@ -2,8 +2,8 @@ package service.managers;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import service.InMemory.InMemoryHistoryManager;
-import service.InMemory.InMemoryTaskManager;
+import service.in_memory.InMemoryHistoryManager;
+import service.in_memory.InMemoryTaskManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static service.managers.Managers.getDefaultHistory;
