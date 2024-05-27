@@ -139,7 +139,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         subtask11.setEndTime(subtask11.getEndTime());
         subtask11.setEpicId(epic10.getId());
         manager.createSubtask(subtask11);
-
         bw.write(manager.toString(task8));
         bw.write(manager.toString(task9));
         bw.write(manager.toString(epic10));
