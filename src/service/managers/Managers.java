@@ -1,5 +1,7 @@
 package service.managers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import service.in_memory.InMemoryHistoryManager;
 import service.in_memory.InMemoryTaskManager;
 
@@ -13,4 +15,11 @@ public class Managers { //подбирает нужную реализацию T
 
         return new InMemoryHistoryManager();
     }
+
+    public static Gson getGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+       // gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        return gsonBuilder.create();
+    }
+
 }

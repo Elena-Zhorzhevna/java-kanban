@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
+
     protected static final Map<Integer, Task> tasks = new HashMap<>(); //хэш-таблица задач
     protected static final Map<Integer, Subtask> subtasks = new HashMap<>(); //хэш-таблица подзадач
     protected static final Map<Integer, Epic> epics = new HashMap<>(); //хэш-таблица эпиков
