@@ -24,6 +24,10 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     TaskManager taskManager = Managers.getDefault();
     Gson gson = Managers.getGson();
 
+    public TasksHandler(final TaskManager taskManager, final Gson gson) {
+        this.taskManager = taskManager;
+        this.gson = gson;
+    }
 
     private int parsePathId(String path) {
         try {
