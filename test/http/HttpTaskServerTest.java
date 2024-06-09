@@ -41,11 +41,11 @@ public class HttpTaskServerTest {
     void init() throws IOException {
         taskManager = Managers.getDefault();
         taskServer = new HttpTaskServer(taskManager);
-        Task task = new Task("TaskName", "TaskDescription");
+        task = new Task("TaskName", "TaskDescription");
         taskManager.createTask(task);
-        Epic epic = new Epic("EpicForSubtask", "DE");
+        epic = new Epic("EpicForSubtask", "DE");
         taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("S", "SD", epic.getId());
+        subtask = new Subtask("S", "SD", epic.getId());
         taskManager.createSubtask(subtask);
         taskServer.start();
     }
@@ -85,7 +85,7 @@ public class HttpTaskServerTest {
 
         Task actual = gson.fromJson(response.body(), taskType);
         assertNotNull(actual, "Задачи не возвращаются");
-        assertEquals(task, actual.get(0), "Задачи не совпадают");
+        assertEquals(task, actual, "Задачи не совпадают");
 
     }
 
@@ -101,7 +101,8 @@ public class HttpTaskServerTest {
 
         // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks");
+        URI url = URI.create("http://localhost:8080/api/v1/tasks");
+       // URI url = URI.create("http://localhost:8080/tasks");
         HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
 
         // вызываем рест, отвечающий за создание задач

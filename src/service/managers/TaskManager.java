@@ -6,6 +6,7 @@ import model.Task;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     List<Task> getAllTasks(); //получение всех подзадач
@@ -47,4 +48,6 @@ public interface TaskManager {
     void deleteEpicById(int id) throws IOException; //удаление эпика по айди
 
     public List<Task> getHistory(); //получение списка 10 последних просмотренных задач
+
+    public Set<Task> getPrioritizedTasks(); //получение приоритетного списка задач
 }
