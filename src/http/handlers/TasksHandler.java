@@ -45,27 +45,17 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) {
         String path = httpExchange.getRequestURI().getPath();
         String requestMethod = httpExchange.getRequestMethod();
-        try {
+        try (httpExchange) {
             switch (requestMethod) {
-
-                case "GET": //получение задачи
-                    handleGetTask(httpExchange);
-                    break;
-                case "POST": //добавление или обновление задачи
-                    handlePostTask(httpExchange, path);
-                    break;
-                case "DELETE": //удаление задач
-                    handleDeleteTask(httpExchange);
-                    break;
-                default:
-                    sendNotAllowed405(httpExchange, "Ждем GET, POST или DELETE запрос, а получили - "
-                            + requestMethod, 405);
+                case "GET" -> handleGetTask(httpExchange); //получение задачи
+                case "POST" -> handlePostTask(httpExchange, path); //добавление или обновление задачи
+                case "DELETE" -> handleDeleteTask(httpExchange); //удаление задач
+                default -> sendNotAllowed405(httpExchange,
+                        "Ждем GET, POST или DELETE запрос, а получили - " + requestMethod,
+                        405);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-
-        } finally {
-            httpExchange.close();
         }
     }
 
@@ -103,24 +93,24 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-        private void handleAddTask(HttpExchange exchange) throws IOException {
-            final String requestBody = readText(exchange);
-            final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
-            if (!isValidJsonTask(jsonBody)) {
-                sendNotAllowed405(exchange, "Неправильный набор полей в теле запроса", 405);
-                return;
-            }
-            Task task = gson.fromJson(requestBody, Task.class);
-            try {
-                String response = gson.toJson(taskManager.createTask(task));
-                sendSuccessButNoNeedToReturn201(exchange, "Задача добавлена в TaskManager", 201);
-            } catch (Exception e) {
-                sendHasInteractions406(exchange, "Задача пересекается по времени с существующей задачей",
-                        406);
-            }
+    private void handleAddTask(HttpExchange exchange) throws IOException {
+        final String requestBody = readText(exchange);
+        final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
+        if (!isValidJsonTask(jsonBody)) {
+            sendNotAllowed405(exchange, "Неправильный набор полей в теле запроса", 405);
+            return;
         }
+        Task task = gson.fromJson(requestBody, Task.class);
+        try {
+            String response = gson.toJson(taskManager.createTask(task));
+            sendSuccessButNoNeedToReturn201(exchange, "Задача добавлена в TaskManager", 201);
+        } catch (Exception e) {
+            sendHasInteractions406(exchange, "Задача пересекается по времени с существующей задачей",
+                    406);
+        }
+    }
 
-        //обновление задачи
+    //обновление задачи
     private void handleUpdateTask(HttpExchange httpExchange, String path) throws IOException, TaskNotFoundException {
         final String pathId = path.replaceFirst("/tasks/", "");
         final int id = parsePathId(pathId);
