@@ -15,11 +15,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
-    //private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final String SUBTASKS_PATH = "^/api/v1/subtasks/$";
+    private final String SUBTASKS_PATH = "^/api/v1/subtasks$";
     private final String SUBTASKS_ID_PATH = "^/api/v1/subtasks/\\d+$";
-    TaskManager taskManager; //= Managers.getDefault();
-    Gson gson; //= Managers.getGson();
+    TaskManager taskManager;
+    Gson gson;
 
     public SubtasksHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;
@@ -75,7 +74,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
         //задача по айди
         if (Pattern.matches(SUBTASKS_ID_PATH, path)) {
-            String pathId = path.replaceFirst("api/v1/tasks/", "");
+            String pathId = path.replaceFirst("/api/v1/subtasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 String response = gson.toJson(taskManager.getSubtaskById(id));
@@ -119,7 +118,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
     //обновление задачи
     private void handleUpdateSubtask(HttpExchange httpExchange, String path) throws IOException, TaskNotFoundException {
-        final String pathId = path.replaceFirst("/subtasks/", "");
+        final String pathId = path.replaceFirst("/api/v1/subtasks/", "");
         final int id = parsePathId(pathId);
         if (id <= 0) {
             sendNotAllowed405(httpExchange, "Неправильный формат id", 405);
@@ -157,7 +156,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         //задачи по айди
         if (Pattern.matches(SUBTASKS_ID_PATH, path)) {
             String requestMethod = httpExchange.getRequestMethod();
-            String pathId = path.replaceFirst("api/v1/subtasks/", "");
+            String pathId = path.replaceFirst("/api/v1/subtasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 taskManager.deleteSubtaskById(id);

@@ -31,11 +31,11 @@ public class HttpTaskServer {
         this.taskManager = taskManager;
         gson = Managers.getGson();
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
-        server.createContext("/api/v1/tasks/", new TasksHandler(this.taskManager, this.gson));
-        server.createContext("/api/v1/epics/", new EpicsHandler(this.taskManager, this.gson));
-        server.createContext("/api/v1/subtasks/", new SubtasksHandler(this.taskManager, this.gson));
-        server.createContext("/tasks/history/", new HistoryHandler());
-        server.createContext("/tasks/prioritized/", new PrioritizedHandler());
+        server.createContext("/api/v1/tasks", new TasksHandler(this.taskManager, this.gson));
+        server.createContext("/api/v1/epics", new EpicsHandler(this.taskManager, this.gson));
+        server.createContext("/api/v1/subtasks", new SubtasksHandler(this.taskManager, this.gson));
+        server.createContext("/api/v1/history", new HistoryHandler(this.taskManager, this.gson));
+        server.createContext("/api/v1/prioritized", new PrioritizedHandler(this.taskManager, this.gson));
         //server.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }

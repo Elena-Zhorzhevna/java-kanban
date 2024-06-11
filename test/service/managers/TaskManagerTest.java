@@ -195,7 +195,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void updateEpicTest() throws IOException {
         Epic epic = new Epic("Эпик1", "Описание эпика1", Status.IN_PROGRESS);
         manager.createEpic(epic);
-        Epic testEpic = new Epic(epic.getId(), "ЭпикНАЗАМЕНУ", "ОписаниеЭНАЗАМЕНУ", Status.NEW);
+        Epic testEpic = new Epic("ЭпикНАЗАМЕНУ","ОписаниеЭНАЗАМЕНУ", Status.NEW, epic.getId());
         manager.updateEpic(testEpic);
         assertEquals(manager.getEpicById(testEpic.getId()), testEpic);
         assertEquals(manager.getEpicById(testEpic.getId()).getTaskName(), testEpic.getTaskName());

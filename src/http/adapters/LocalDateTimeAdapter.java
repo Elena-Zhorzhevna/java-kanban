@@ -2,6 +2,7 @@ package http.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -9,19 +10,64 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+   // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     @Override
-    public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-        jsonWriter.value(localDateTime.format(dtf));
+    public void write(final JsonWriter jsonWriter, final LocalDateTime localDateTime) throws IOException {
+        if (localDateTime == null) {
+            jsonWriter.nullValue();
+        } else {
+            jsonWriter.value(localDateTime.format(dtf));
+        }
     }
 
     @Override
     public LocalDateTime read(final JsonReader jsonReader) throws IOException {
+        if(jsonReader.peek() == JsonToken.NULL) {
+            jsonReader.nextNull();
+            return null;
+        }
         return LocalDateTime.parse(jsonReader.nextString(), dtf);
     }
 }
+
+
+
+
+
+
+
+
+
+/*
+public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+    @Override
+    public void write(JsonWriter out, LocalDateTime value) throws IOException {
+        if (value == null) {
+            out.nullValue();
+        } else {
+            out.value(value.format(formatter));
+        }
+    }
+
+    @Override
+    public LocalDateTime read(JsonReader in) throws IOException {
+        if (in.peek() == null) {
+            in.nextNull();
+            return null;
+        } else {
+            return LocalDateTime.parse(in.nextString(), formatter);
+        }
+    }
+}
+
+
+
+
+
 
 
 /*

@@ -26,7 +26,23 @@ public class DurationAdapter extends TypeAdapter<Duration> {
             return null;
         } else {
             return Duration.parse(in.nextString());
+                    //Duration.ofHours(in.nextLong());
+
         }
     }
-
 }
+
+/*
+    public static class DurationAdapter extends TypeAdapter<Duration> {
+
+        @Override
+        public void write(final JsonWriter jsonWriter, final Duration duration) throws IOException {
+            jsonWriter.value(duration.toHours());
+        }
+
+        @Override
+        public Duration read(final JsonReader jsonReader) throws IOException {
+            return Duration.ofHours(jsonReader.nextLong());
+        }
+    }
+ */

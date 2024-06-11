@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 public class Subtask extends Task {
     private int epicId; //айди эпика
-    private TaskType type = TaskType.SUBTASK; //тип подзадачи
 
     public Subtask() {
+        setType(TaskType.SUBTASK); //тип подзадачи
     }
 
     public Subtask(String name, String description) {
@@ -53,15 +53,6 @@ public class Subtask extends Task {
         this.epicId = id;
     }
 
-    @Override
-    public TaskType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(TaskType type) {
-        this.type = type;
-    }
 
     @Override
     public String toString() {

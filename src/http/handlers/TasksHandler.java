@@ -8,7 +8,6 @@ import com.sun.net.httpserver.HttpHandler;
 import model.Task;
 import service.exception.TaskIntersectionException;
 import service.exception.TaskNotFoundException;
-import service.managers.Managers;
 import service.managers.TaskManager;
 
 import java.io.IOException;
@@ -18,11 +17,11 @@ import java.util.regex.Pattern;
 
 public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final String TASKS_PATH = "^/api/v1/tasks/$";
+    private final String TASKS_PATH = "^/api/v1/tasks$";
     private final String TASKS_ID_PATH = "^/api/v1/tasks/\\d+$";
     private
-    TaskManager taskManager = Managers.getDefault();
-    Gson gson = Managers.getGson();
+    TaskManager taskManager; // = Managers.getDefault();
+    Gson gson; // = Managers.getGson();
 
     public TasksHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;
@@ -38,7 +37,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private String readText(HttpExchange httpExchange) throws IOException {
-        return new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        return new String(httpExchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
     }
 
     @Override
@@ -77,9 +76,6 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                 System.out.println("Получен некорректный идентификатор задачи = " + id);
                 httpExchange.sendResponseHeaders(405, 0);
             }
-
-        } else {
-            httpExchange.sendResponseHeaders(405, 0);
         }
     }
 
@@ -112,7 +108,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
     //обновление задачи
     private void handleUpdateTask(HttpExchange httpExchange, String path) throws IOException, TaskNotFoundException {
-        final String pathId = path.replaceFirst("/tasks/", "");
+        final String pathId = path.replaceFirst("/api/v1/tasks/", "");
         final int id = parsePathId(pathId);
         if (id <= 0) {
             sendNotAllowed405(httpExchange, "Неправильный формат id", 405);
@@ -150,7 +146,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         //задачи по айди
         if (Pattern.matches(TASKS_ID_PATH, path)) {
             String requestMethod = httpExchange.getRequestMethod();
-            String pathId = path.replaceFirst("api/v1/tasks/", "");
+            String pathId = path.replaceFirst("/api/v1/tasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 taskManager.deleteByTaskId(id);
@@ -159,16 +155,14 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                 System.out.println("Получен некорректный идентификатор задачи = " + id);
                 httpExchange.sendResponseHeaders(405, 0);
             }
-        } else {
-            httpExchange.sendResponseHeaders(405, 0);
         }
     }
 
     private boolean isValidJsonTask(JsonObject jsonObject) {
         return jsonObject.has("id") &&
-                jsonObject.has("title") &&
-                jsonObject.has("description") &&
+                jsonObject.has("taskName") &&
                 jsonObject.has("status") &&
+                jsonObject.has("description") &&
                 jsonObject.has("duration") &&
                 jsonObject.has("startTime");
     }

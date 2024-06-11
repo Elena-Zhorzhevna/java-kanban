@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final String EPICS_PATH = "^/api/v1/epics/$";
+    private final String EPICS_PATH = "^/api/v1/epics$";
     private final String EPICS_ID_PATH = "^/api/v1/epics/\\d+$";
     private
     TaskManager taskManager; // = Managers.getDefault();
@@ -77,7 +77,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         }
         //GET эпик по айди
         if (Pattern.matches(EPICS_ID_PATH, path)) {
-            String pathId = path.replaceFirst("api/v1/tasks/", "");
+            String pathId = path.replaceFirst("/api/v1/tasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 String response = gson.toJson(taskManager.getTaskById(id));
@@ -86,8 +86,6 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                 System.out.println("Получен некорректный идентификатор задачи = " + id);
                 httpExchange.sendResponseHeaders(405, 0);
             }
-        } else {
-            httpExchange.sendResponseHeaders(405, 0);
         }
 
         //GET все сабтаски эпика
@@ -119,7 +117,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     private void handleAddEpic(HttpExchange exchange) throws IOException {
         final String requestBody = readText(exchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
-        if (!isValidJsonTask(jsonBody)) {
+        if (!isValidJsonEpic(jsonBody)) {
             sendNotAllowed405(exchange, "Неправильный набор полей в теле запроса", 405);
             return;
         }
@@ -135,7 +133,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 
     //обновление задачи
     private void handleUpdateEpic(HttpExchange httpExchange, String path) throws IOException, TaskNotFoundException {
-        final String pathId = path.replaceFirst("/epics/", "");
+        final String pathId = path.replaceFirst("/api/v1/epics/", "");
         final int id = parsePathId(pathId);
         if (id <= 0) {
             sendNotAllowed405(httpExchange, "Неправильный формат id", 405);
@@ -144,7 +142,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 
         final String requestBody = readText(httpExchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
-        if (!isValidJsonTask(jsonBody)) {
+        if (!isValidJsonEpic(jsonBody)) {
             sendNotAllowed405(httpExchange, "Неправильный набор полей в теле запроса", 405);
             return;
         }
@@ -173,7 +171,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         //задачи по айди
         if (Pattern.matches(EPICS_ID_PATH, path)) {
             String requestMethod = httpExchange.getRequestMethod();
-            String pathId = path.replaceFirst("api/v1/epics/", "");
+            String pathId = path.replaceFirst("/api/v1/epics/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 taskManager.deleteEpicById(id);
@@ -187,12 +185,15 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private boolean isValidJsonTask(JsonObject jsonObject) {
-        return jsonObject.has("id") &&
-                jsonObject.has("title") &&
-                jsonObject.has("description") &&
+    private boolean isValidJsonEpic(JsonObject jsonObject) {
+        return  jsonObject.has("id") &&
+                jsonObject.has("taskName") &&
+                jsonObject.has("description");
+        }
+        /*        jsonObject.has("name") &&
                 jsonObject.has("status") &&
+                jsonObject.has("description") &&
                 jsonObject.has("duration") &&
-                jsonObject.has("startTime");
+                jsonObject.has("startTime")&&
+                jsonObject.has("endTime");*/
     }
-}
