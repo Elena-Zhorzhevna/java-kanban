@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
-
     private TaskManager taskManager;
     private Gson gson;
 
@@ -20,6 +19,7 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
+    //обработчик GET-запроса для приоритетного списка
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String prioritizedPath = "^/api/v1/prioritized$";

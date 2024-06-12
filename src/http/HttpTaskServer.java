@@ -14,18 +14,12 @@ import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class HttpTaskServer {
+public class HttpTaskServer { //слушает порт $8080$ и принимать запросы
 
     public static final int PORT = 8080;
     private static HttpServer server;
     private Gson gson;
     private TaskManager taskManager;
-
-    public void start() {
-        System.out.println("Started TaskServer " + PORT);
-        System.out.println("http://localhost:" + PORT + "/api/v1/tasks");
-        server.start();
-    }
 
     public HttpTaskServer() throws IOException {
         this(Managers.getDefault());
@@ -47,6 +41,12 @@ public class HttpTaskServer {
         server.start();
     }
 
+    public void start() { //запуск сервера
+        System.out.println("Started TaskServer " + PORT);
+        System.out.println("http://localhost:" + PORT + "/api/v1/tasks");
+        server.start();
+    }
+
     public static Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
@@ -55,7 +55,7 @@ public class HttpTaskServer {
         return gsonBuilder.create();
     }
 
-    public void stop() {
+    public void stop() { //остановка сервера
         server.stop(0);
         System.out.println("Остановили сервер на порту " + PORT);
     }

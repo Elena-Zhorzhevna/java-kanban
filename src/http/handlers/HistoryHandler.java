@@ -19,6 +19,7 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
+    //обработчик GET-запроса для списка истории
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String historyPath = "^/api/v1/history$";

@@ -17,9 +17,8 @@ public class Managers { //подбирает нужную реализацию T
         return new InMemoryHistoryManager();
     }
 
+    //возвращает объект - менеджер с восстановленными данными из файла
     public static TaskManager getFileBackedTaskManager(final File file) {
         return FileBackedTaskManager.loadFromFile(file);
     }
 }
-
-

@@ -25,14 +25,6 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
-    private int parsePathId(String path) {
-        try {
-            return Integer.parseInt(path);
-        } catch (NumberFormatException exception) {
-            return -1;
-        }
-    }
-
     private String readText(HttpExchange httpExchange) throws IOException {
         return new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
     }
@@ -65,9 +57,10 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
+    //обработчик GET-запроса
     private void handleGetSubtask(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
-        //get
+        //все подзадачи
         if (Pattern.matches(subtasksPath, path)) {
             String response = gson.toJson(taskManager.getAllSubtasks());
             sendText200(httpExchange, response, 200);
@@ -80,12 +73,13 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 String response = gson.toJson(taskManager.getSubtaskById(id));
                 sendText200(httpExchange, response, 200);
             } else {
-                System.out.println("Получен некорректный идентификатор задачи = " + id);
-                httpExchange.sendResponseHeaders(405, 0);
+                sendNotAllowed405(httpExchange, "Получен некорректный идентификатор задачи = " + id,
+                        405);
             }
         }
     }
 
+    //обработчик POST-запроса
     private void handlePostSubtask(HttpExchange exchange, String path) throws IOException, TaskNotFoundException {
         if (Pattern.matches(subtasksPath, path)) {
             handleAddSubtask(exchange);
@@ -96,6 +90,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
+    //обработчик добавления подзадачи
     private void handleAddSubtask(HttpExchange exchange) throws IOException {
         final String requestBody = readText(exchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
@@ -113,7 +108,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    //обновление задачи
+    //обработчик обновления подзадачи
     private void handleUpdateSubtask(HttpExchange httpExchange, String path) throws IOException, TaskNotFoundException {
         final String pathId = path.replaceFirst("/api/v1/subtasks/", "");
         final int id = parsePathId(pathId);
@@ -143,14 +138,15 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
+    //обработчик DELETE - запроса
     private void handleDeleteSubtask(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
-        //все задачи
+        //все подзадачи
         if (Pattern.matches(subtasksPath, path)) {
             taskManager.deleteAllSubtasks();
             sendSuccessButNoNeedToReturn201(httpExchange, "Подзадачи удалены", 201);
         }
-        //задачи по айди
+        //подзадачи по айди
         if (Pattern.matches(subtasksIdPath, path)) {
             String requestMethod = httpExchange.getRequestMethod();
             String pathId = path.replaceFirst("/api/v1/subtasks/", "");
@@ -159,11 +155,9 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 taskManager.deleteSubtaskById(id);
                 sendText200(httpExchange, "Удалена подзадача с айди = " + id, 200);
             } else {
-                System.out.println("Получен некорректный идентификатор задачи = " + id);
-                httpExchange.sendResponseHeaders(405, 0);
+                sendNotAllowed405(httpExchange, "Получен некорректный идентификатор задачи = " + id,
+                        405);
             }
-        } else {
-            httpExchange.sendResponseHeaders(405, 0);
         }
     }
 
@@ -174,5 +168,13 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 jsonObject.has("status") &&
                 jsonObject.has("duration") &&
                 jsonObject.has("startTime");
+    }
+
+    private int parsePathId(String path) {
+        try {
+            return Integer.parseInt(path);
+        } catch (NumberFormatException exception) {
+            return -1;
+        }
     }
 }
