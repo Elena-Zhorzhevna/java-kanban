@@ -20,8 +20,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     private final String TASKS_PATH = "^/api/v1/tasks$";
     private final String TASKS_ID_PATH = "^/api/v1/tasks/\\d+$";
     private
-    TaskManager taskManager; // = Managers.getDefault();
-    Gson gson; // = Managers.getGson();
+    TaskManager taskManager;
+    Gson gson;
 
     public TasksHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;
@@ -67,7 +67,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
         //задача по айди
         if (Pattern.matches(TASKS_ID_PATH, path)) {
-            String pathId = path.replaceFirst("api/v1/tasks/", "");
+            String pathId = path.replaceFirst("/api/v1/tasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
                 String response = gson.toJson(taskManager.getTaskById(id));

@@ -20,8 +20,8 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     private final String EPICS_PATH = "^/api/v1/epics$";
     private final String EPICS_ID_PATH = "^/api/v1/epics/\\d+$";
     private
-    TaskManager taskManager; // = Managers.getDefault();
-    Gson gson; // = Managers.getGson();
+    TaskManager taskManager;
+    Gson gson;
 
     public EpicsHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;
@@ -72,15 +72,15 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         String path = httpExchange.getRequestURI().getPath();
         //GET все эпики
         if (Pattern.matches(EPICS_PATH, path)) {
-            String response = gson.toJson(taskManager.getAllTasks());
+            String response = gson.toJson(taskManager.getAllEpics());
             sendText200(httpExchange, response, 200);
         }
         //GET эпик по айди
         if (Pattern.matches(EPICS_ID_PATH, path)) {
-            String pathId = path.replaceFirst("/api/v1/tasks/", "");
+            String pathId = path.replaceFirst("/api/v1/epics/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
-                String response = gson.toJson(taskManager.getTaskById(id));
+                String response = gson.toJson(taskManager.getEpicById(id));
                 sendText200(httpExchange, response, 200);
             } else {
                 System.out.println("Получен некорректный идентификатор задачи = " + id);
@@ -139,7 +139,6 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             sendNotAllowed405(httpExchange, "Неправильный формат id", 405);
             return;
         }
-
         final String requestBody = readText(httpExchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
         if (!isValidJsonEpic(jsonBody)) {
@@ -186,14 +185,8 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private boolean isValidJsonEpic(JsonObject jsonObject) {
-        return  jsonObject.has("id") &&
+        return jsonObject.has("id") &&
                 jsonObject.has("taskName") &&
                 jsonObject.has("description");
-        }
-        /*        jsonObject.has("name") &&
-                jsonObject.has("status") &&
-                jsonObject.has("description") &&
-                jsonObject.has("duration") &&
-                jsonObject.has("startTime")&&
-                jsonObject.has("endTime");*/
     }
+}

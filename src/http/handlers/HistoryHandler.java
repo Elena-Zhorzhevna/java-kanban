@@ -13,23 +13,24 @@ import java.util.regex.Pattern;
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
     TaskManager taskManager;
     Gson gson;
+
     public HistoryHandler(final TaskManager taskManager, final Gson gson) throws IOException {
         this.taskManager = taskManager;
         this.gson = gson;
     }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-
         String HISTORY_PATH = "^/api/v1/history$";
         String path = httpExchange.getRequestURI().getPath();
 
-            if (Pattern.matches(HISTORY_PATH, path)) {
-                List<Task> tasks = taskManager.getHistory();
-                String s = gson.toJson(tasks);
-                sendText200(httpExchange, s, 200);
-            } else {
-                sendBadRequest400(httpExchange, "Неверный путь запроса", 400);
-            }
-        httpExchange.close();
-            }
+        if (Pattern.matches(HISTORY_PATH, path)) {
+            List<Task> tasks = taskManager.getHistory();
+            String s = gson.toJson(tasks);
+            sendText200(httpExchange, s, 200);
+        } else {
+            sendBadRequest400(httpExchange, "Неверный путь запроса", 400);
         }
+        httpExchange.close();
+    }
+}

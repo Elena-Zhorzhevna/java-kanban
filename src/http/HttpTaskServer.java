@@ -8,12 +8,11 @@ import service.managers.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.file.Path;
 
 public class HttpTaskServer {
 
     public static final int PORT = 8080;
-    private HttpServer server;
+    private static HttpServer server;
     private Gson gson;
     private TaskManager taskManager;
 
@@ -24,7 +23,7 @@ public class HttpTaskServer {
     }
 
     public HttpTaskServer() throws IOException {
-        this(Managers.getFileBackedTaskManager(Path.of("testTask18152325523283051340.csv").toFile()));
+        this(Managers.getDefault());
     }
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
@@ -36,17 +35,14 @@ public class HttpTaskServer {
         server.createContext("/api/v1/subtasks", new SubtasksHandler(this.taskManager, this.gson));
         server.createContext("/api/v1/history", new HistoryHandler(this.taskManager, this.gson));
         server.createContext("/api/v1/prioritized", new PrioritizedHandler(this.taskManager, this.gson));
-        //server.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }
 
     public static void main(String[] args) throws IOException {
-        HttpTaskServer taskServer = new HttpTaskServer(Managers
-                .getFileBackedTaskManager(Path.of("testTask18152325523283051340.csv").toFile()));
-        taskServer.start();
+        server.start();
     }
 
-    public void stop () {
+    public void stop() {
         server.stop(0);
         System.out.println("Остановили сервер на порту " + PORT);
     }

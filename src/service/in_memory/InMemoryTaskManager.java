@@ -25,11 +25,12 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    private static int id = 0; //айди задач
+    private int id = 0; //айди задач
 
     //список задач и подзадач, отсортированный по времени их начала
     protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
             Comparator.nullsLast(Comparator.naturalOrder())));
+
     @Override
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;

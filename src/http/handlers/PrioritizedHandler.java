@@ -19,6 +19,7 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
         this.taskManager = taskManager;
         this.gson = gson;
     }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String PRIORITIZED_PATH = "^/api/v1/prioritized$";

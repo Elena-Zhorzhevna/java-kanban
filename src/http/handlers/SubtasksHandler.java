@@ -83,9 +83,6 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 System.out.println("Получен некорректный идентификатор задачи = " + id);
                 httpExchange.sendResponseHeaders(405, 0);
             }
-
-        } else {
-            httpExchange.sendResponseHeaders(405, 0);
         }
     }
 
@@ -102,7 +99,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     private void handleAddSubtask(HttpExchange exchange) throws IOException {
         final String requestBody = readText(exchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
-        if (!isValidJsonTask(jsonBody)) {
+        if (!isValidJsonSubtask(jsonBody)) {
             sendNotAllowed405(exchange, "Неправильный набор полей в теле запроса", 405);
             return;
         }
@@ -127,7 +124,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
         final String requestBody = readText(httpExchange);
         final JsonObject jsonBody = JsonParser.parseString(requestBody).getAsJsonObject();
-        if (!isValidJsonTask(jsonBody)) {
+        if (!isValidJsonSubtask(jsonBody)) {
             sendNotAllowed405(httpExchange, "Неправильный набор полей в теле запроса", 405);
             return;
         }
@@ -170,13 +167,12 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private boolean isValidJsonTask(JsonObject jsonObject) {
+    private boolean isValidJsonSubtask(JsonObject jsonObject) {
         return jsonObject.has("id") &&
-                jsonObject.has("title") &&
+                jsonObject.has("taskName") &&
                 jsonObject.has("description") &&
                 jsonObject.has("status") &&
                 jsonObject.has("duration") &&
                 jsonObject.has("startTime");
     }
 }
-
