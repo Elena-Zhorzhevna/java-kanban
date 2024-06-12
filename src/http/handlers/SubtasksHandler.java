@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
-    private final String SUBTASKS_PATH = "^/api/v1/subtasks$";
-    private final String SUBTASKS_ID_PATH = "^/api/v1/subtasks/\\d+$";
+    private final String subtasksPath = "^/api/v1/subtasks$";
+    private final String subtasksIdPath = "^/api/v1/subtasks/\\d+$";
     TaskManager taskManager;
     Gson gson;
 
@@ -68,12 +68,12 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     private void handleGetSubtask(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
         //get
-        if (Pattern.matches(SUBTASKS_PATH, path)) {
+        if (Pattern.matches(subtasksPath, path)) {
             String response = gson.toJson(taskManager.getAllSubtasks());
             sendText200(httpExchange, response, 200);
         }
         //задача по айди
-        if (Pattern.matches(SUBTASKS_ID_PATH, path)) {
+        if (Pattern.matches(subtasksIdPath, path)) {
             String pathId = path.replaceFirst("/api/v1/subtasks/", "");
             int id = parsePathId(pathId);
             if (id != -1) {
@@ -87,9 +87,9 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handlePostSubtask(HttpExchange exchange, String path) throws IOException, TaskNotFoundException {
-        if (Pattern.matches(SUBTASKS_PATH, path)) {
+        if (Pattern.matches(subtasksPath, path)) {
             handleAddSubtask(exchange);
-        } else if (Pattern.matches(SUBTASKS_ID_PATH, path)) {
+        } else if (Pattern.matches(subtasksIdPath, path)) {
             handleUpdateSubtask(exchange, path);
         } else {
             sendBadRequest400(exchange, "Неверный путь запроса", 400);
@@ -146,12 +146,12 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     private void handleDeleteSubtask(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
         //все задачи
-        if (Pattern.matches(SUBTASKS_PATH, path)) {
+        if (Pattern.matches(subtasksPath, path)) {
             taskManager.deleteAllSubtasks();
             sendSuccessButNoNeedToReturn201(httpExchange, "Подзадачи удалены", 201);
         }
         //задачи по айди
-        if (Pattern.matches(SUBTASKS_ID_PATH, path)) {
+        if (Pattern.matches(subtasksIdPath, path)) {
             String requestMethod = httpExchange.getRequestMethod();
             String pathId = path.replaceFirst("/api/v1/subtasks/", "");
             int id = parsePathId(pathId);
