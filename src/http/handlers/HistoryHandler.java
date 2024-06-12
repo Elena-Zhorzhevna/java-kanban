@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager taskManager;
-    Gson gson;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public HistoryHandler(final TaskManager taskManager, final Gson gson) throws IOException {
         this.taskManager = taskManager;

@@ -17,8 +17,8 @@ import java.util.regex.Pattern;
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     private final String subtasksPath = "^/api/v1/subtasks$";
     private final String subtasksIdPath = "^/api/v1/subtasks/\\d+$";
-    TaskManager taskManager;
-    Gson gson;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public SubtasksHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;

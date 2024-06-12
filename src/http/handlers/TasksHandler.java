@@ -19,9 +19,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final String tasksPath = "^/api/v1/tasks$";
     private final String tasksIdPath = "^/api/v1/tasks/\\d+$";
-    private
-    TaskManager taskManager;
-    Gson gson;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public TasksHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;

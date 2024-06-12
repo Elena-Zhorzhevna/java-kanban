@@ -1,15 +1,9 @@
 package service.managers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import http.adapters.DurationAdapter;
-import http.adapters.LocalDateTimeAdapter;
 import service.in_memory.InMemoryHistoryManager;
 import service.in_memory.InMemoryTaskManager;
 
 import java.io.File;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class Managers { //подбирает нужную реализацию TaskManager и возвращает объект правильного типа
 
@@ -21,14 +15,6 @@ public class Managers { //подбирает нужную реализацию T
     public static HistoryManager getDefaultHistory() { //возвращает объект - менеджер
 
         return new InMemoryHistoryManager();
-    }
-
-    public static Gson getGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .registerTypeAdapter(Duration.class, new DurationAdapter())
-                .serializeNulls();
-        return gsonBuilder.create();
     }
 
     public static TaskManager getFileBackedTaskManager(final File file) {

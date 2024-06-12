@@ -17,9 +17,8 @@ import java.util.regex.Pattern;
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     private final String epicsPath = "^/api/v1/epics$";
     private final String epicsIdPath = "^/api/v1/epics/\\d+$";
-    private
-    TaskManager taskManager;
-    Gson gson;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public EpicsHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;

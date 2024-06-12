@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
 
-    TaskManager taskManager;
-    Gson gson;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public PrioritizedHandler(final TaskManager taskManager, final Gson gson) {
         this.taskManager = taskManager;
