@@ -11,12 +11,10 @@ import service.exception.TaskNotFoundException;
 import service.managers.TaskManager;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final String epicsPath = "^/api/v1/epics$";
     private final String epicsIdPath = "^/api/v1/epics/\\d+$";
     private
@@ -89,8 +87,8 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         }
 
         //GET все сабтаски эпика
-        String EPIC_SUBTASKS_BY_ID = "^/api/v1/epics/\\d+/subtasks$";
-        if (Pattern.matches(EPIC_SUBTASKS_BY_ID, path)) {
+        String epicSubtasksById = "^/api/v1/epics/\\d+/subtasks$";
+        if (Pattern.matches(epicSubtasksById, path)) {
             String pathId = path.replaceFirst("/api/v1/epics/", "")
                     .replaceFirst("/subtasks", "");
             int id = parsePathId(pathId);
