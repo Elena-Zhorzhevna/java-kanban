@@ -21,10 +21,10 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String HISTORY_PATH = "^/api/v1/history$";
+        String historyPath = "^/api/v1/history$";
         String path = httpExchange.getRequestURI().getPath();
 
-        if (Pattern.matches(HISTORY_PATH, path)) {
+        if (Pattern.matches(historyPath, path)) {
             List<Task> tasks = taskManager.getHistory();
             String s = gson.toJson(tasks);
             sendText200(httpExchange, s, 200);
