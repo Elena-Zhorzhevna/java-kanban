@@ -12,10 +12,8 @@ import java.util.List;
 public class Epic extends Task {
     private List<Integer> subtaskEpicsId = new ArrayList<>(); //список айди подзадач у эпика
 
-    private int id; //айди эпика
-    private TaskType type = TaskType.EPIC;
-
     public Epic() {
+        setType(TaskType.EPIC);
     }
 
     public Epic(String name, String description) {
@@ -27,14 +25,12 @@ public class Epic extends Task {
         super(taskName, description, status);
     }
 
-    public Epic(int id, String name, String description) {
-        super(name, description);
-        this.id = id;
+    public Epic(String name, String description, int id) {
+        super(name, description, id);
     }
 
-    public Epic(int id, String name, String description, Status status) {
-        super(name, description, status);
-        this.id = id;
+    public Epic(String name, String description, Status status, int id) {
+        super(name, description, status, id);
     }
 
     public Epic(int id, TaskType type, String taskName, String description, Status status) {
@@ -56,16 +52,6 @@ public class Epic extends Task {
 
     public void deleteSubtaskEpicsId() {
         subtaskEpicsId.clear();
-    }
-
-    @Override
-    public TaskType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(TaskType type) {
-        this.type = type;
     }
 
     @Override

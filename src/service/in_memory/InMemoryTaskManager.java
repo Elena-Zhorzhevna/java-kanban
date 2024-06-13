@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
+
     protected static final Map<Integer, Task> tasks = new HashMap<>(); //хэш-таблица задач
     protected static final Map<Integer, Subtask> subtasks = new HashMap<>(); //хэш-таблица подзадач
     protected static final Map<Integer, Epic> epics = new HashMap<>(); //хэш-таблица эпиков
@@ -24,12 +25,13 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    private static int id = 0; //айди задач
+    private int id = 0; //айди задач
 
     //список задач и подзадач, отсортированный по времени их начала
     protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
             Comparator.nullsLast(Comparator.naturalOrder())));
 
+    @Override
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
     }
